@@ -1,0 +1,42 @@
+version: "2.1"
+
+services:
+    db:
+        image: postgres
+        container_name: trabajo_pc2_postgres
+        environment:
+            POSTGRES_DB: postgres
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: example
+        ports:
+            - 5433:5432
+        volumes:
+        - ./mysql/:/docker-entrypoint-initdb.d
+        restart: always
+
+    dash:
+        container_name: trabajo_pc2_dash
+        build: "./dash"      
+        ports:
+            - 8055:8055         
+        volumes:
+            - "./dash/src:/src" 
+        depends_on:
+            db:
+                condition: service_started
+        restart: always
+
+    jupyter:
+        container_name: trabajo_pc2_jupyter
+        build: "./jupyter"
+        ports:
+            - 8888:8888
+        dns:
+            - 8.8.8.8
+        volumes:
+            - "./jupyter/src:/src" 
+        depends_on:
+            db:
+                condition: service_started
+        restart: always
+        

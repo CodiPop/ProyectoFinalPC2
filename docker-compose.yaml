@@ -12,7 +12,7 @@ services:
             - 5433:5432
         volumes:
         - ./mysql/:/docker-entrypoint-initdb.d
-        restart: always
+        
 
     dash:
         container_name: trabajo_pc2_dash
@@ -24,7 +24,7 @@ services:
         depends_on:
             db:
                 condition: service_started
-        restart: always
+        
 
     jupyter:
         container_name: trabajo_pc2_jupyter
@@ -38,5 +38,5 @@ services:
         depends_on:
             db:
                 condition: service_started
-        restart: always
+        
         

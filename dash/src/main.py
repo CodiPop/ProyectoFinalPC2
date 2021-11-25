@@ -5,6 +5,7 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import psycopg2
+import time
 
 external_stylesheets = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
 
@@ -127,7 +128,24 @@ def grafica_3(id):
 
 
 if __name__ == "__main__":
-    conexion = psycopg2.connect("dbname=postgres host=db user=postgres password=example")
+    connected = False
+    retry = 0
+    while(not connected):
+        try:
+            conexion = psycopg2.connect("dbname=postgres host=db user=postgres password=example")
+        except psycopg2.OperationalError as e:
+            if retry < 5:
+                retry +=1
+                time.sleep(10)
+            else:
+                print('Unable to connect!\n{0}').format(e)
+                sys.exit(1)
+        else:
+            print('Connected to Database!')
+            connected = True
+   
+
+    
     df_og = pd.read_sql_query("SELECT * FROM data;",conexion)
     df_og.columns = [col.replace("\n", " ").strip() for col in df_og.columns]
     app.run_server(host="0.0.0.0", debug=False, port=8055)

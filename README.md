@@ -1,3 +1,7 @@
+# 3 Contenedores de docker (Jupyter, Dash, Postgres)
+
+# Instrucciones
+
 ## Primero
 
 git clone https://github.com/CodiPop/ProyectoFinalPC2.git
